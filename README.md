@@ -1,6 +1,6 @@
 # OLX Price Index
 
-Daily price tracking for products on OLX.ro.
+Daily price tracking for products on OLX.ro as a proxy for economic indicators.
 
 ![Overview](images/overview.png)
 
@@ -21,6 +21,36 @@ Daily price tracking for products on OLX.ro.
 
 ---
 
+## 🎧 Sony WH-1000XM5
+
+![Sony WH-1000XM5 Dashboard](images/sony-wh1000xm5_dashboard.png)
+
+| Metric | Value |
+|--------|-------|
+| Listings | 42 |
+| Min | 250 RON |
+| Max | 1,400 RON |
+| Median | 900 RON |
+| Average | 852 RON |
+| Last Update | 2025-12-06 |
+
+---
+
+## 🪑 Dyson Supersonic
+
+![Dyson Supersonic Dashboard](images/dyson-supersonic_dashboard.png)
+
+| Metric | Value |
+|--------|-------|
+| Listings | 101 |
+| Min | 50 RON |
+| Max | 2,200 RON |
+| Median | 1,000 RON |
+| Average | 1,010 RON |
+| Last Update | 2025-12-06 |
+
+---
+
 ## About
 
 This index tracks prices of various products on OLX.ro to provide insights into market trends.
@@ -35,4 +65,4 @@ Data is collected daily via GitHub Actions.
 
 ---
 
-*Generated automatically by [Aeron Miller Index](https://github.com)*
+*Generated automatically by [Aeron Miller Index](https://github.com/FlorinPopaCodes/aeron-miller-index)*

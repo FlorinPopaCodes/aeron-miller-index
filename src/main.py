@@ -81,7 +81,7 @@ def generate_readme(products: list[Product]) -> None:
     lines = [
         "# OLX Price Index",
         "",
-        "Daily price tracking for products on OLX.ro.",
+        "Daily price tracking for products on OLX.ro as a proxy for economic indicators.",
         "",
         "![Overview](images/overview.png)",
         "",
@@ -136,7 +136,7 @@ def generate_readme(products: list[Product]) -> None:
             "",
             "---",
             "",
-            "*Generated automatically by [Aeron Miller Index](https://github.com)*",
+            "*Generated automatically by [Aeron Miller Index](https://github.com/FlorinPopaCodes/aeron-miller-index)*",
         ]
     )
 
@@ -177,7 +177,9 @@ def main() -> None:
             # Calculate stats
             prices = [listing.price for listing in listings]
             stats = DailyStats.from_prices(date.today(), prices)
-            logger.info(f"Stats: count={stats.count}, min={stats.min_price}, max={stats.max_price}, median={stats.median_price}")
+            logger.info(
+                f"Stats: count={stats.count}, min={stats.min_price}, max={stats.max_price}, median={stats.median_price}"
+            )
 
             # Save to CSV
             append_to_csv(csv_path, stats)

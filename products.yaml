@@ -4,12 +4,17 @@ products:
     query: "aeron miller"
     emoji: "🪑"
 
-  # Uncomment to add more products:
-  # - slug: sony-wh1000xm5
-  #   name: "Sony WH-1000XM5"
-  #   query: "sony wh-1000xm5"
-  #   emoji: "🎧"
+  - slug: sony-wh1000xm5
+    name: "Sony WH-1000XM5"
+    query: "sony wh-1000xm5"
+    emoji: "🎧"
 
+  - slug: dyson-supersonic
+    name: "Dyson Supersonic"
+    query: "dyson supersonic"
+    emoji: "🪑"
+
+  # Uncomment to add more products:
   # - slug: macbook-pro-m3
   #   name: "MacBook Pro M3"
   #   query: "macbook pro m3"

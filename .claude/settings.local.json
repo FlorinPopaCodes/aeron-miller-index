@@ -1,6 +1,12 @@
 {
   "permissions": {
-    "allow": ["Bash(tree:*)", "Bash(find:*)", "Bash(uv:*)"],
+    "allow": [
+      "Bash(tree:*)",
+      "Bash(find:*)",
+      "Bash(uv:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
     "deny": [],
     "ask": []
   }
