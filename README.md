@@ -2,13 +2,13 @@
 
 Daily price tracking for products on OLX.ro as a proxy for economic indicators.
 
-![Overview](images/overview.png)
+![Overview](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/overview.png?v=20251206)
 
 ---
 
 ## 🪑 Herman Miller Aeron
 
-![Herman Miller Aeron Dashboard](images/aeron-miller_dashboard.png)
+![Herman Miller Aeron Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/aeron-miller_dashboard.png?v=20251206)
 
 | Metric | Value |
 |--------|-------|
@@ -23,7 +23,7 @@ Daily price tracking for products on OLX.ro as a proxy for economic indicators.
 
 ## 🎧 Sony WH-1000XM5
 
-![Sony WH-1000XM5 Dashboard](images/sony-wh1000xm5_dashboard.png)
+![Sony WH-1000XM5 Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/sony-wh1000xm5_dashboard.png?v=20251206)
 
 | Metric | Value |
 |--------|-------|
@@ -38,7 +38,7 @@ Daily price tracking for products on OLX.ro as a proxy for economic indicators.
 
 ## 🪑 Dyson Supersonic
 
-![Dyson Supersonic Dashboard](images/dyson-supersonic_dashboard.png)
+![Dyson Supersonic Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/dyson-supersonic_dashboard.png?v=20251206)
 
 | Metric | Value |
 |--------|-------|

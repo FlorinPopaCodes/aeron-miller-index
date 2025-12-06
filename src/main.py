@@ -78,12 +78,16 @@ def should_update_today(csv_path: Path) -> bool:
 
 def generate_readme(products: list[Product]) -> None:
     """Generate README.md with current stats."""
+    # Cache-busting: use today's date as version
+    cache_bust = date.today().strftime("%Y%m%d")
+    base_url = "https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main"
+
     lines = [
         "# OLX Price Index",
         "",
         "Daily price tracking for products on OLX.ro as a proxy for economic indicators.",
         "",
-        "![Overview](images/overview.png)",
+        f"![Overview]({base_url}/images/overview.png?v={cache_bust})",
         "",
         "---",
         "",
@@ -91,11 +95,11 @@ def generate_readme(products: list[Product]) -> None:
 
     for product in products:
         csv_path = DATA_DIR / f"{product.slug}.csv"
-        dashboard_path = f"images/{product.slug}_dashboard.png"
+        img_url = f"{base_url}/images/{product.slug}_dashboard.png?v={cache_bust}"
 
         lines.append(f"## {product.emoji} {product.name}")
         lines.append("")
-        lines.append(f"![{product.name} Dashboard]({dashboard_path})")
+        lines.append(f"![{product.name} Dashboard]({img_url})")
         lines.append("")
 
         if csv_path.exists():
