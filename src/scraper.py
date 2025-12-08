@@ -94,7 +94,13 @@ class OLXScraper:
                     continue
 
                 response.raise_for_status()
-                return response.json()
+                data = response.json()
+
+                # Check for GraphQL errors in the response
+                if "errors" in data:
+                    logger.error(f"GraphQL errors: {data['errors']}")
+
+                return data
 
             except httpx.HTTPStatusError as e:
                 logger.error(f"HTTP error {e.response.status_code}: {e}")
@@ -118,7 +124,10 @@ class OLXScraper:
 
     def _parse_listings(self, data: dict) -> Iterator[Listing]:
         """Parse GraphQL response into Listing objects."""
-        result = data.get("data", {}).get("clientCompatibleListings", {})
+        result = data.get("data", {}).get("clientCompatibleListings")
+        if result is None:
+            logger.warning("No clientCompatibleListings in response")
+            return
 
         if result.get("__typename") == "ListingError":
             error = result.get("error", {})
@@ -157,7 +166,10 @@ class OLXScraper:
 
     def _get_total_count(self, data: dict) -> int:
         """Get total number of listings from response."""
-        result = data.get("data", {}).get("clientCompatibleListings", {})
+        result = data.get("data", {}).get("clientCompatibleListings")
+        if result is None:
+            logger.warning(f"Unexpected API response structure: {data}")
+            return 0
         return result.get("metadata", {}).get("total_elements", 0)
 
     def fetch_all(self, product: Product) -> list[Listing]:
