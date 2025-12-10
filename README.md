@@ -27,12 +27,12 @@ Daily price tracking for products on OLX.ro as a proxy for economic indicators.
 
 | Metric | Value |
 |--------|-------|
-| Listings | 41 |
+| Listings | 43 |
 | Min | 250 RON |
 | Max | 1,400 RON |
-| Median | 900 RON |
-| Average | 846 RON |
-| Last Update | 2025-12-09 |
+| Median | 850 RON |
+| Average | 847 RON |
+| Last Update | 2025-12-10 |
 
 ---
 
@@ -44,10 +44,10 @@ Daily price tracking for products on OLX.ro as a proxy for economic indicators.
 |--------|-------|
 | Listings | 102 |
 | Min | 50 RON |
-| Max | 2,200 RON |
+| Max | 2,000 RON |
 | Median | 1,000 RON |
-| Average | 1,005 RON |
-| Last Update | 2025-12-09 |
+| Average | 982 RON |
+| Last Update | 2025-12-10 |
 
 ---
 
