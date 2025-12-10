@@ -1,6 +1,7 @@
 """OLX GraphQL scraper with retry logic."""
 
 import logging
+import random
 import time
 from typing import Iterator
 
@@ -47,8 +48,8 @@ query ListingSearchQuery($searchParameters: [SearchParameter!]) {
 }
 """
 
-MAX_RETRIES = 3
-RETRY_DELAY_BASE = 2  # seconds, exponential backoff
+MAX_RETRIES = 5
+RETRY_DELAY_BASE = 5  # seconds, exponential backoff
 REQUEST_DELAY = 0.5  # delay between paginated requests
 ITEMS_PER_PAGE = 50
 
@@ -58,7 +59,7 @@ class OLXScraper:
 
     def __init__(self) -> None:
         self.client = httpx.Client(
-            timeout=30.0,
+            timeout=60.0,
             headers={
                 "Content-Type": "application/json",
                 "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
@@ -105,22 +106,26 @@ class OLXScraper:
             except httpx.HTTPStatusError as e:
                 logger.error(f"HTTP error {e.response.status_code}: {e}")
                 if attempt < MAX_RETRIES - 1:
-                    wait_time = RETRY_DELAY_BASE ** (attempt + 1)
-                    logger.info(f"Retrying in {wait_time}s...")
-                    time.sleep(wait_time)
+                    self._retry_wait(attempt)
                 else:
                     raise
 
             except httpx.RequestError as e:
                 logger.error(f"Request error: {e}")
                 if attempt < MAX_RETRIES - 1:
-                    wait_time = RETRY_DELAY_BASE ** (attempt + 1)
-                    logger.info(f"Retrying in {wait_time}s...")
-                    time.sleep(wait_time)
+                    self._retry_wait(attempt)
                 else:
                     raise
 
         return {}
+
+    def _retry_wait(self, attempt: int) -> None:
+        """Wait before retrying with exponential backoff and jitter."""
+        base_wait = RETRY_DELAY_BASE * (2 ** attempt)
+        jitter = random.uniform(0, base_wait * 0.5)
+        wait_time = base_wait + jitter
+        logger.info(f"Retrying in {wait_time:.1f}s...")
+        time.sleep(wait_time)
 
     def _parse_listings(self, data: dict) -> Iterator[Listing]:
         """Parse GraphQL response into Listing objects."""

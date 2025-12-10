@@ -1,6 +1,7 @@
 """Main orchestration for Aeron Miller Index."""
 
 import logging
+import sys
 from datetime import date
 from pathlib import Path
 
@@ -160,37 +161,44 @@ def main() -> None:
         logger.warning("No products configured, exiting")
         return
 
+    failed_products = []
+
     with OLXScraper() as scraper:
         for product in products:
-            logger.info(f"Processing: {product.name}")
+            try:
+                logger.info(f"Processing: {product.name}")
 
-            csv_path = DATA_DIR / f"{product.slug}.csv"
+                csv_path = DATA_DIR / f"{product.slug}.csv"
 
-            # Check if we already have today's data
-            if not should_update_today(csv_path):
-                logger.info(f"Skipping {product.name} - already updated today")
-                continue
+                # Check if we already have today's data
+                if not should_update_today(csv_path):
+                    logger.info(f"Skipping {product.name} - already updated today")
+                    continue
 
-            # Fetch listings
-            listings = scraper.fetch_all(product)
+                # Fetch listings
+                listings = scraper.fetch_all(product)
 
-            if not listings:
-                logger.warning(f"No listings found for {product.name}")
-                continue
+                if not listings:
+                    logger.warning(f"No listings found for {product.name}")
+                    continue
 
-            # Calculate stats
-            prices = [listing.price for listing in listings]
-            stats = DailyStats.from_prices(date.today(), prices)
-            logger.info(
-                f"Stats: count={stats.count}, min={stats.min_price}, max={stats.max_price}, median={stats.median_price}"
-            )
+                # Calculate stats
+                prices = [listing.price for listing in listings]
+                stats = DailyStats.from_prices(date.today(), prices)
+                logger.info(
+                    f"Stats: count={stats.count}, min={stats.min_price}, max={stats.max_price}, median={stats.median_price}"
+                )
 
-            # Save to CSV
-            append_to_csv(csv_path, stats)
+                # Save to CSV
+                append_to_csv(csv_path, stats)
 
-            # Generate dashboard
-            dashboard_path = IMAGES_DIR / f"{product.slug}_dashboard.png"
-            create_dashboard(product, csv_path, dashboard_path)
+                # Generate dashboard
+                dashboard_path = IMAGES_DIR / f"{product.slug}_dashboard.png"
+                create_dashboard(product, csv_path, dashboard_path)
+
+            except Exception as e:
+                logger.error(f"Failed to process {product.name}: {e}", exc_info=True)
+                failed_products.append(product.name)
 
     # Generate overview chart
     overview_path = IMAGES_DIR / "overview.png"
@@ -198,6 +206,13 @@ def main() -> None:
 
     # Update README
     generate_readme(products)
+
+    # Exit with error if any products failed
+    if failed_products:
+        logger.error(
+            f"Failed to process {len(failed_products)} product(s): {', '.join(failed_products)}"
+        )
+        sys.exit(1)
 
     logger.info("Update complete!")
 
