@@ -2,9 +2,7 @@ name: Daily Scrape
 
 on:
   schedule:
-    # 09:00 București (UTC+2 in summer, UTC+3 in winter)
-    # Using 06:00 UTC to cover both cases
-    - cron: '0 6 * * *'
+    - cron: '0 9 * * *'
   workflow_dispatch:  # Allow manual trigger
 
 permissions:
