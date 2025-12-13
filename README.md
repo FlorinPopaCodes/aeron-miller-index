@@ -2,52 +2,52 @@
 
 Daily price tracking for products on OLX.ro as a proxy for economic indicators.
 
-![Overview](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/overview.png?v=20251212)
+![Overview](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/overview.png?v=20251213)
 
 ---
 
 ## 🪑 Herman Miller Aeron
 
-![Herman Miller Aeron Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/aeron-miller_dashboard.png?v=20251212)
+![Herman Miller Aeron Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/aeron-miller_dashboard.png?v=20251213)
 
 | Metric | Value |
 |--------|-------|
-| Listings | 32 |
+| Listings | 33 |
 | Min | 100 RON |
 | Max | 7,549 RON |
-| Median | 3,296 RON |
+| Median | 3,378 RON |
 | Average | 3,682 RON |
-| Last Update | 2025-12-12 |
+| Last Update | 2025-12-13 |
 
 ---
 
 ## 🎧 Sony WH-1000XM5
 
-![Sony WH-1000XM5 Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/sony-wh1000xm5_dashboard.png?v=20251212)
+![Sony WH-1000XM5 Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/sony-wh1000xm5_dashboard.png?v=20251213)
 
 | Metric | Value |
 |--------|-------|
-| Listings | 45 |
+| Listings | 47 |
 | Min | 250 RON |
 | Max | 1,400 RON |
 | Median | 850 RON |
-| Average | 827 RON |
-| Last Update | 2025-12-12 |
+| Average | 822 RON |
+| Last Update | 2025-12-13 |
 
 ---
 
 ## 🪑 Dyson Supersonic
 
-![Dyson Supersonic Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/dyson-supersonic_dashboard.png?v=20251212)
+![Dyson Supersonic Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/dyson-supersonic_dashboard.png?v=20251213)
 
 | Metric | Value |
 |--------|-------|
-| Listings | 103 |
+| Listings | 106 |
 | Min | 50 RON |
 | Max | 2,200 RON |
 | Median | 1,000 RON |
 | Average | 993 RON |
-| Last Update | 2025-12-12 |
+| Last Update | 2025-12-13 |
 
 ---
 
