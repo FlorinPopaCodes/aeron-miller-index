@@ -2,13 +2,13 @@
 
 Daily price tracking for products on OLX.ro as a proxy for economic indicators.
 
-![Overview](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/overview.png?v=20260101)
+![Overview](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/overview.png?v=20260102)
 
 ---
 
 ## 🪑 Herman Miller Aeron
 
-![Herman Miller Aeron Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/aeron-miller_dashboard.png?v=20260101)
+![Herman Miller Aeron Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/aeron-miller_dashboard.png?v=20260102)
 
 | Metric | Value |
 |--------|-------|
@@ -17,13 +17,13 @@ Daily price tracking for products on OLX.ro as a proxy for economic indicators.
 | Max | 6,490 RON |
 | Median | 3,765 RON |
 | Average | 3,858 RON |
-| Last Update | 2026-01-01 |
+| Last Update | 2026-01-02 |
 
 ---
 
 ## 🎧 Sony WH-1000XM5
 
-![Sony WH-1000XM5 Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/sony-wh1000xm5_dashboard.png?v=20260101)
+![Sony WH-1000XM5 Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/sony-wh1000xm5_dashboard.png?v=20260102)
 
 | Metric | Value |
 |--------|-------|
@@ -31,14 +31,14 @@ Daily price tracking for products on OLX.ro as a proxy for economic indicators.
 | Min | 200 RON |
 | Max | 1,250 RON |
 | Median | 899 RON |
-| Average | 816 RON |
-| Last Update | 2026-01-01 |
+| Average | 815 RON |
+| Last Update | 2026-01-02 |
 
 ---
 
 ## 🪑 Dyson Supersonic
 
-![Dyson Supersonic Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/dyson-supersonic_dashboard.png?v=20260101)
+![Dyson Supersonic Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/dyson-supersonic_dashboard.png?v=20260102)
 
 | Metric | Value |
 |--------|-------|
@@ -47,7 +47,7 @@ Daily price tracking for products on OLX.ro as a proxy for economic indicators.
 | Max | 2,500 RON |
 | Median | 1,149 RON |
 | Average | 1,063 RON |
-| Last Update | 2026-01-01 |
+| Last Update | 2026-01-02 |
 
 ---
 
