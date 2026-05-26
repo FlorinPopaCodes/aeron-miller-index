@@ -2,52 +2,52 @@
 
 Daily price tracking for products on OLX.ro as a proxy for economic indicators.
 
-![Overview](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/overview.png?v=20260525)
+![Overview](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/overview.png?v=20260526)
 
 ---
 
 ## 🪑 Herman Miller Aeron
 
-![Herman Miller Aeron Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/aeron-miller_dashboard.png?v=20260525)
+![Herman Miller Aeron Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/aeron-miller_dashboard.png?v=20260526)
 
 | Metric | Value |
 |--------|-------|
-| Listings | 30 |
+| Listings | 31 |
 | Min | 505 RON |
 | Max | 6,600 RON |
-| Median | 3,872 RON |
-| Average | 3,936 RON |
-| Last Update | 2026-05-25 |
+| Median | 3,765 RON |
+| Average | 3,858 RON |
+| Last Update | 2026-05-26 |
 
 ---
 
 ## 🎧 Sony WH-1000XM5
 
-![Sony WH-1000XM5 Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/sony-wh1000xm5_dashboard.png?v=20260525)
+![Sony WH-1000XM5 Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/sony-wh1000xm5_dashboard.png?v=20260526)
 
 | Metric | Value |
 |--------|-------|
-| Listings | 50 |
+| Listings | 48 |
 | Min | 77 RON |
 | Max | 1,199 RON |
 | Median | 800 RON |
-| Average | 746 RON |
-| Last Update | 2026-05-25 |
+| Average | 742 RON |
+| Last Update | 2026-05-26 |
 
 ---
 
 ## 🪑 Dyson Supersonic
 
-![Dyson Supersonic Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/dyson-supersonic_dashboard.png?v=20260525)
+![Dyson Supersonic Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/dyson-supersonic_dashboard.png?v=20260526)
 
 | Metric | Value |
 |--------|-------|
-| Listings | 108 |
+| Listings | 106 |
 | Min | 50 RON |
 | Max | 4,000 RON |
 | Median | 1,000 RON |
-| Average | 1,051 RON |
-| Last Update | 2026-05-25 |
+| Average | 1,046 RON |
+| Last Update | 2026-05-26 |
 
 ---
 
