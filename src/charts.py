@@ -17,6 +17,7 @@ COLORS = {
     "min": "#34a853",
     "max": "#fbbc04",
     "range": "rgba(66, 133, 244, 0.15)",
+    "count": "#9aa0a6",
     "grid": "#e8e8e8",
 }
 
@@ -39,6 +40,18 @@ def create_dashboard(product: Product, csv_path: Path, output_path: Path) -> boo
 
     fig = go.Figure()
     dates = df["date"]
+
+    # Listing count as a line on the secondary (right) axis
+    fig.add_trace(go.Scatter(
+        x=dates,
+        y=df["count"],
+        mode="lines+markers",
+        name="Listings",
+        line=dict(color=COLORS["count"], width=2, dash="dot"),
+        marker=dict(size=4),
+        yaxis="y2",
+        hovertemplate="Listings: %{y:,.0f}<extra></extra>",
+    ))
 
     # Min-Max range fill (only if we have multiple points)
     if len(df) > 1:
@@ -86,8 +99,15 @@ def create_dashboard(product: Product, csv_path: Path, output_path: Path) -> boo
             font=dict(size=18),
         ),
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="center", x=0.5),
-        xaxis=dict(showgrid=True, gridcolor=COLORS["grid"], tickformat="%d %b %Y"),
+        xaxis=dict(showgrid=True, gridcolor=COLORS["grid"], tickformat="%d %b %Y", nticks=10),
         yaxis=dict(showgrid=True, gridcolor=COLORS["grid"], title="Price (RON)", tickformat=","),
+        yaxis2=dict(
+            overlaying="y",
+            side="right",
+            showgrid=False,
+            title="Listings",
+            rangemode="tozero",
+        ),
         height=500,
         width=1000,
         plot_bgcolor="white",
@@ -138,7 +158,7 @@ def create_overview(products: list[Product], data_dir: Path, output_path: Path) 
     fig.update_layout(
         title=dict(text="<b>OLX Price Index - Overview</b>", x=0.5, font=dict(size=18)),
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="center", x=0.5),
-        xaxis=dict(showgrid=True, gridcolor=COLORS["grid"], tickformat="%d %b %Y"),
+        xaxis=dict(showgrid=True, gridcolor=COLORS["grid"], tickformat="%d %b %Y", nticks=10),
         yaxis=dict(showgrid=True, gridcolor=COLORS["grid"], title="Median Price (RON)", tickformat=","),
         height=450,
         width=1000,
