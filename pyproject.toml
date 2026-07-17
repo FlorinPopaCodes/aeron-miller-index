@@ -12,6 +12,11 @@ dependencies = [
     "python-dateutil>=2.8",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+]
+
 [project.scripts]
 ami = "src.main:main"
 

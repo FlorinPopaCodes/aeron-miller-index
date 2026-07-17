@@ -19,15 +19,22 @@ dependencies = [
     { name = "pyyaml" },
 ]
 
+[package.optional-dependencies]
+dev = [
+    { name = "pytest" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "httpx", specifier = ">=0.27" },
     { name = "kaleido", specifier = ">=0.2" },
     { name = "pandas", specifier = ">=2.1" },
     { name = "plotly", specifier = ">=5.18" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "python-dateutil", specifier = ">=2.8" },
     { name = "pyyaml", specifier = ">=6.0" },
 ]
+provides-extras = ["dev"]
 
 [[package]]
 name = "anyio"
