@@ -17,8 +17,9 @@
 - No formatter or linter is configured; follow existing import grouping and line length patterns.
 
 ## Testing Guidelines
-- There is no automated test suite yet.
-- Validate changes by running the pipeline and checking for a new CSV row plus updated PNGs and `README.md`.
+- `uv run --extra dev pytest` runs the unit tests in `tests/`.
+- Name test files `tests/test_<module>.py`; keep tests offline (no network calls).
+- Validate pipeline changes by running the app and checking for a new CSV row plus updated PNGs and `README.md`.
 
 ## Commit & Pull Request Guidelines
 - Commit messages: use `Update: YYYY-MM-DD` for data refresh commits (often prefixed with a chart emoji in history); use imperative verbs like "Add", "Fix", or "Simplify" for code changes.

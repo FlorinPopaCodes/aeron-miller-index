@@ -93,13 +93,14 @@ class OLXScraper:
                 response = self.client.post(OLX_GRAPHQL_URL, json=payload)
 
                 if response.status_code == 429:
-                    wait_time = self._get_retry_after(response) or RETRY_DELAY_BASE * (
-                        2 ** attempt
-                    )
-                    logger.warning(f"Rate limited, waiting {wait_time}s...")
                     if attempt < MAX_RETRIES - 1:
+                        wait_time = self._get_retry_after(
+                            response
+                        ) or RETRY_DELAY_BASE * (2 ** attempt)
+                        logger.warning(f"Rate limited, waiting {wait_time}s...")
                         time.sleep(wait_time)
                         continue
+                    logger.error("Rate limited on final attempt, giving up")
                     response.raise_for_status()
 
                 response.raise_for_status()

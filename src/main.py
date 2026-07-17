@@ -264,7 +264,8 @@ def main() -> None:
                 product_failed = True
 
             try:
-                create_dashboard(product, csv_path, dashboard_path)
+                if csv_path.exists():
+                    create_dashboard(product, csv_path, dashboard_path)
             except Exception as e:
                 logger.error(
                     f"Failed to generate dashboard for {product.name}: {e}",
