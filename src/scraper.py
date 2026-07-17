@@ -54,6 +54,10 @@ REQUEST_DELAY = 0.5  # delay between paginated requests
 ITEMS_PER_PAGE = 50
 
 
+class ScraperError(RuntimeError):
+    """Raised when the OLX API returns an unexpected or invalid response."""
+
+
 class OLXScraper:
     """Scraper for OLX GraphQL API."""
 
@@ -89,19 +93,30 @@ class OLXScraper:
                 response = self.client.post(OLX_GRAPHQL_URL, json=payload)
 
                 if response.status_code == 429:
-                    wait_time = 60
-                    logger.warning(f"Rate limited, waiting {wait_time}s...")
-                    time.sleep(wait_time)
-                    continue
+                    if attempt < MAX_RETRIES - 1:
+                        wait_time = self._get_retry_after(
+                            response
+                        ) or RETRY_DELAY_BASE * (2 ** attempt)
+                        logger.warning(f"Rate limited, waiting {wait_time}s...")
+                        time.sleep(wait_time)
+                        continue
+                    logger.error("Rate limited on final attempt, giving up")
+                    response.raise_for_status()
 
                 response.raise_for_status()
-                data = response.json()
+                try:
+                    data = response.json()
+                except ValueError as e:
+                    raise ScraperError(f"Invalid JSON response: {e}") from e
 
                 # Check for GraphQL errors in the response
                 if "errors" in data:
-                    logger.error(f"GraphQL errors: {data['errors']}")
+                    raise ScraperError(f"GraphQL errors: {data['errors']}")
 
                 return data
+
+            except ScraperError:
+                raise
 
             except httpx.HTTPStatusError as e:
                 logger.error(f"HTTP error {e.response.status_code}: {e}")
@@ -119,6 +134,17 @@ class OLXScraper:
 
         return {}
 
+    @staticmethod
+    def _get_retry_after(response: httpx.Response) -> int | None:
+        """Parse Retry-After header when available."""
+        value = response.headers.get("Retry-After")
+        if not value:
+            return None
+        try:
+            return int(value)
+        except ValueError:
+            return None
+
     def _retry_wait(self, attempt: int) -> None:
         """Wait before retrying with exponential backoff and jitter."""
         base_wait = RETRY_DELAY_BASE * (2 ** attempt)
@@ -127,18 +153,23 @@ class OLXScraper:
         logger.info(f"Retrying in {wait_time:.1f}s...")
         time.sleep(wait_time)
 
-    def _parse_listings(self, data: dict) -> Iterator[Listing]:
-        """Parse GraphQL response into Listing objects."""
+    def _get_result(self, data: dict) -> dict:
+        """Extract the listings result or raise on API errors."""
         result = data.get("data", {}).get("clientCompatibleListings")
         if result is None:
-            logger.warning("No clientCompatibleListings in response")
-            return
+            raise ScraperError("No clientCompatibleListings in response")
 
         if result.get("__typename") == "ListingError":
             error = result.get("error", {})
-            logger.error(f"OLX API error: {error.get('code')} - {error.get('detail')}")
-            return
+            raise ScraperError(
+                f"OLX API error: {error.get('code')} - {error.get('detail')}"
+            )
 
+        return result
+
+    def _parse_listings(self, data: dict) -> Iterator[Listing]:
+        """Parse GraphQL response into Listing objects."""
+        result = self._get_result(data)
         listings = result.get("data", [])
         for item in listings:
             price = self._extract_price(item)
@@ -171,11 +202,12 @@ class OLXScraper:
 
     def _get_total_count(self, data: dict) -> int:
         """Get total number of listings from response."""
-        result = data.get("data", {}).get("clientCompatibleListings")
-        if result is None:
-            logger.warning(f"Unexpected API response structure: {data}")
-            return 0
-        return result.get("metadata", {}).get("total_elements", 0)
+        result = self._get_result(data)
+        metadata = result.get("metadata", {})
+        if "total_elements" not in metadata:
+            logger.warning("Missing metadata.total_elements; using page size fallback")
+            return len(result.get("data", []))
+        return metadata.get("total_elements", 0)
 
     def fetch_all(self, product: Product) -> list[Listing]:
         """Fetch all listings for a product with pagination."""
