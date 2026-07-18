@@ -7,9 +7,10 @@ from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 
+import pandas as pd
 import yaml
 
-from .charts import create_dashboard, create_overview
+from .charts import create_dashboard, create_overview, load_csv_data
 from .models import DailyStats, Product
 from .scraper import OLXScraper
 
@@ -106,29 +107,31 @@ def append_to_csv(csv_path: Path, stats: DailyStats) -> None:
     """Append daily stats to CSV file."""
     csv_path.parent.mkdir(parents=True, exist_ok=True)
 
-    # Check if file exists and has content
-    write_header = not csv_path.exists() or csv_path.stat().st_size == 0
+    row = pd.DataFrame([{
+        "date": stats.date,
+        "count": stats.count,
+        "min": stats.min_price,
+        "max": stats.max_price,
+        "mean": stats.mean_price,
+        "median": stats.median_price,
+    }])
 
-    with open(csv_path, "a", encoding="utf-8") as f:
-        if write_header:
-            f.write(DailyStats.csv_header() + "\n")
-        f.write(stats.to_csv_row() + "\n")
+    write_header = not csv_path.exists() or csv_path.stat().st_size == 0
+    row.to_csv(csv_path, mode="a", header=write_header, index=False)
 
     logger.info(f"Appended stats to {csv_path}")
 
 
 def should_update_today(csv_path: Path) -> bool:
     """Check if we already have data for today."""
-    if not csv_path.exists():
+    df = load_csv_data(csv_path)
+    if df.empty:
         return True
 
-    today_str = date.today().isoformat()
-
-    with open(csv_path, encoding="utf-8") as f:
-        for line in f:
-            if line.startswith(today_str):
-                logger.info(f"Data for {today_str} already exists in {csv_path}")
-                return False
+    today = date.today()
+    if (df["date"].dt.date == today).any():
+        logger.info(f"Data for {today.isoformat()} already exists in {csv_path}")
+        return False
 
     return True
 
@@ -163,24 +166,18 @@ def generate_readme(
         lines.append(f"![{product.name} Dashboard]({img_url})")
         lines.append("")
 
-        if csv_path.exists():
-            # Read last line for latest stats
-            with open(csv_path, encoding="utf-8") as f:
-                all_lines = f.readlines()
-                if len(all_lines) > 1:  # Has data beyond header
-                    last_line = all_lines[-1].strip()
-                    parts = last_line.split(",")
-                    if len(parts) == 6:
-                        date_str, count, min_p, max_p, mean_p, median_p = parts
-                        lines.append("| Metric | Value |")
-                        lines.append("|--------|-------|")
-                        lines.append(f"| Listings | {count} |")
-                        lines.append(f"| Min | {int(float(min_p)):,} RON |")
-                        lines.append(f"| Max | {int(float(max_p)):,} RON |")
-                        lines.append(f"| Median | {int(float(median_p)):,} RON |")
-                        lines.append(f"| Average | {int(float(mean_p)):,} RON |")
-                        lines.append(f"| Last Update | {date_str} |")
-                        lines.append("")
+        df = load_csv_data(csv_path)
+        if not df.empty:
+            latest = df.iloc[-1]
+            lines.append("| Metric | Value |")
+            lines.append("|--------|-------|")
+            lines.append(f"| Listings | {int(latest['count'])} |")
+            lines.append(f"| Min | {int(latest['min']):,} RON |")
+            lines.append(f"| Max | {int(latest['max']):,} RON |")
+            lines.append(f"| Median | {int(latest['median']):,} RON |")
+            lines.append(f"| Average | {int(latest['mean']):,} RON |")
+            lines.append(f"| Last Update | {latest['date'].strftime('%Y-%m-%d')} |")
+            lines.append("")
 
         lines.append("---")
         lines.append("")
