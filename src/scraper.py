@@ -1,11 +1,17 @@
 """OLX GraphQL scraper with retry logic."""
 
 import logging
-import random
 import time
 from typing import Iterator
 
 import httpx
+from tenacity import (
+    before_sleep_log,
+    retry,
+    retry_if_exception_type,
+    stop_after_attempt,
+    wait_exponential_jitter,
+)
 
 from .models import Listing, Product
 
@@ -58,6 +64,29 @@ class ScraperError(RuntimeError):
     """Raised when the OLX API returns an unexpected or invalid response."""
 
 
+class RateLimitedError(httpx.HTTPStatusError):
+    """Raised on a 429 response; carries the server's requested wait time."""
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        request: httpx.Request,
+        response: httpx.Response,
+        retry_after: float | None,
+    ) -> None:
+        super().__init__(message, request=request, response=response)
+        self.retry_after = retry_after
+
+
+def _wait_for_rate_limit(retry_state) -> float:
+    """Respect Retry-After on 429s, otherwise fall back to exponential backoff."""
+    exc = retry_state.outcome.exception()
+    if isinstance(exc, RateLimitedError) and exc.retry_after is not None:
+        return exc.retry_after
+    return wait_exponential_jitter(initial=RETRY_DELAY_BASE, max=120)(retry_state)
+
+
 class OLXScraper:
     """Scraper for OLX GraphQL API."""
 
@@ -76,6 +105,26 @@ class OLXScraper:
     def __exit__(self, *args) -> None:
         self.client.close()
 
+    @retry(
+        retry=retry_if_exception_type((httpx.HTTPStatusError, httpx.RequestError)),
+        stop=stop_after_attempt(MAX_RETRIES),
+        wait=_wait_for_rate_limit,
+        before_sleep=before_sleep_log(logger, logging.WARNING),
+        reraise=True,
+    )
+    def _post(self, payload: dict) -> httpx.Response:
+        """POST the GraphQL payload, raising on rate limits or HTTP errors."""
+        response = self.client.post(OLX_GRAPHQL_URL, json=payload)
+        if response.status_code == 429:
+            raise RateLimitedError(
+                "Rate limited by OLX API",
+                request=response.request,
+                response=response,
+                retry_after=self._get_retry_after(response),
+            )
+        response.raise_for_status()
+        return response
+
     def _make_request(self, query: str, offset: int = 0) -> dict:
         """Make a GraphQL request with retry logic."""
         variables = {
@@ -87,55 +136,21 @@ class OLXScraper:
         }
 
         payload = {"query": GRAPHQL_QUERY, "variables": variables}
+        response = self._post(payload)
 
-        for attempt in range(MAX_RETRIES):
-            try:
-                response = self.client.post(OLX_GRAPHQL_URL, json=payload)
+        try:
+            data = response.json()
+        except ValueError as e:
+            raise ScraperError(f"Invalid JSON response: {e}") from e
 
-                if response.status_code == 429:
-                    if attempt < MAX_RETRIES - 1:
-                        wait_time = self._get_retry_after(
-                            response
-                        ) or RETRY_DELAY_BASE * (2 ** attempt)
-                        logger.warning(f"Rate limited, waiting {wait_time}s...")
-                        time.sleep(wait_time)
-                        continue
-                    logger.error("Rate limited on final attempt, giving up")
-                    response.raise_for_status()
+        # Check for GraphQL errors in the response
+        if "errors" in data:
+            raise ScraperError(f"GraphQL errors: {data['errors']}")
 
-                response.raise_for_status()
-                try:
-                    data = response.json()
-                except ValueError as e:
-                    raise ScraperError(f"Invalid JSON response: {e}") from e
-
-                # Check for GraphQL errors in the response
-                if "errors" in data:
-                    raise ScraperError(f"GraphQL errors: {data['errors']}")
-
-                return data
-
-            except ScraperError:
-                raise
-
-            except httpx.HTTPStatusError as e:
-                logger.error(f"HTTP error {e.response.status_code}: {e}")
-                if attempt < MAX_RETRIES - 1:
-                    self._retry_wait(attempt)
-                else:
-                    raise
-
-            except httpx.RequestError as e:
-                logger.error(f"Request error: {e}")
-                if attempt < MAX_RETRIES - 1:
-                    self._retry_wait(attempt)
-                else:
-                    raise
-
-        return {}
+        return data
 
     @staticmethod
-    def _get_retry_after(response: httpx.Response) -> int | None:
+    def _get_retry_after(response: httpx.Response) -> float | None:
         """Parse Retry-After header when available."""
         value = response.headers.get("Retry-After")
         if not value:
@@ -144,14 +159,6 @@ class OLXScraper:
             return int(value)
         except ValueError:
             return None
-
-    def _retry_wait(self, attempt: int) -> None:
-        """Wait before retrying with exponential backoff and jitter."""
-        base_wait = RETRY_DELAY_BASE * (2 ** attempt)
-        jitter = random.uniform(0, base_wait * 0.5)
-        wait_time = base_wait + jitter
-        logger.info(f"Retrying in {wait_time:.1f}s...")
-        time.sleep(wait_time)
 
     def _get_result(self, data: dict) -> dict:
         """Extract the listings result or raise on API errors."""
