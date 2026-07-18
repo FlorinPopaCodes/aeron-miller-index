@@ -52,12 +52,3 @@ class DailyStats:
             mean_price=round(mean(prices), 2),
             median_price=round(median(prices), 2),
         )
-
-    def to_csv_row(self) -> str:
-        """Convert to CSV row string."""
-        return f"{self.date},{self.count},{self.min_price},{self.max_price},{self.mean_price},{self.median_price}"
-
-    @classmethod
-    def csv_header(cls) -> str:
-        """Return CSV header."""
-        return "date,count,min,max,mean,median"
