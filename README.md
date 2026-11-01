@@ -2,52 +2,52 @@
 
 Daily price tracking for products on OLX.ro as a proxy for economic indicators.
 
-![Overview](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/overview.png?v=20261031)
+![Overview](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/overview.png?v=20261101)
 
 ---
 
 ## 🪑 Herman Miller Aeron
 
-![Herman Miller Aeron Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/aeron-miller_dashboard.png?v=20261031)
+![Herman Miller Aeron Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/aeron-miller_dashboard.png?v=20261101)
 
 | Metric | Value |
 |--------|-------|
-| Listings | 32 |
+| Listings | 30 |
 | Min | 585 RON |
 | Max | 8,375 RON |
 | Median | 4,748 RON |
-| Average | 4,683 RON |
-| Last Update | 2026-10-31 |
+| Average | 4,694 RON |
+| Last Update | 2026-11-01 |
 
 ---
 
 ## 🎧 Sony WH-1000XM5
 
-![Sony WH-1000XM5 Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/sony-wh1000xm5_dashboard.png?v=20261031)
+![Sony WH-1000XM5 Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/sony-wh1000xm5_dashboard.png?v=20261101)
 
 | Metric | Value |
 |--------|-------|
-| Listings | 45 |
+| Listings | 46 |
 | Min | 90 RON |
 | Max | 1,500 RON |
 | Median | 900 RON |
-| Average | 865 RON |
-| Last Update | 2026-10-31 |
+| Average | 866 RON |
+| Last Update | 2026-11-01 |
 
 ---
 
 ## 🪑 Dyson Supersonic
 
-![Dyson Supersonic Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/dyson-supersonic_dashboard.png?v=20261031)
+![Dyson Supersonic Dashboard](https://raw.githubusercontent.com/FlorinPopaCodes/aeron-miller-index/main/images/dyson-supersonic_dashboard.png?v=20261101)
 
 | Metric | Value |
 |--------|-------|
-| Listings | 81 |
+| Listings | 80 |
 | Min | 120 RON |
 | Max | 2,303 RON |
-| Median | 1,000 RON |
-| Average | 1,073 RON |
-| Last Update | 2026-10-31 |
+| Median | 1,024 RON |
+| Average | 1,075 RON |
+| Last Update | 2026-11-01 |
 
 ---
 
